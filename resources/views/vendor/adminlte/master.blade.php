@@ -98,9 +98,11 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data')>
+<!--  ESTA SECCION CONTIENE EL COLOR DE FONDO DEL MENU LOGIN  -->   
 
-    {{-- Body Content --}}
+<body class="@yield('classes_body')" @yield('body_data') style="background-color: white">  
+
+    {{-- Body Content --}} 
     @yield('body')
 
     {{-- Base Scripts (depends on Laravel asset bundling tool) --}}
