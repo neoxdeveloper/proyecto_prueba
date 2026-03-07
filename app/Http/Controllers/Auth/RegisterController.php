@@ -63,10 +63,30 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $empresa = \App\Models\Empresa::firstOrCreate(
+            ['nombre_empresa' => 'Empresa por Defecto'],
+            [
+                'pais' => 'Colombia',
+                'tipo_empresa' => 'General',
+                'nit' => '000000000-0',
+                'telefono' => '0000000',
+                'correo' => 'empresa@ejemplo.com',
+                'cantidad_impuesto' => 19,
+                'nombre_impuesto' => 'IVA',
+                'moneda' => 'COP',
+                'direccion' => 'Dirección por defecto',
+                'ciudad' => 'Bogotá',
+                'departamento' => 'Cundinamarca',
+                'codigo_postal' => '000000',
+                'logo' => 'default_logo.png',
+            ]
+        );
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'empresa_id' => $empresa->id,
         ]);
     }
 }
