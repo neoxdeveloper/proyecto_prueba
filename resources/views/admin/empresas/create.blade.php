@@ -68,8 +68,49 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="Logo">Nombre</label>
-                                    <input type="file" class="form-control" id="nombre" name="nombre">
+                                    <label for="Logo">Logo de la empresa</label>
+                                    <input type="file" class="form-control" id="logo_input" name="logo">
+
+                                    <div class="mt-3 text-center">
+                                        <output id="list">
+                                            <div class="p-2 border rounded bg-light"
+                                                style="min-height: 150px; display: flex; align-items: center; justify-content: center;">
+                                                <small class="text-muted">Vista previa del logo</small>
+                                            </div>
+                                        </output>
+                                    </div>
+
+                                    <script>
+                                        function archivo(evt) {
+                                            var files = evt.target.files;
+                                            var output = document.getElementById('list');
+
+                                            // Limpiar vista previa anterior
+                                            output.innerHTML = '';
+
+                                            for (var i = 0, f; f = files[i]; i++) {
+                                                if (!f.type.match('image.*')) {
+                                                    continue;
+                                                }
+
+                                                var reader = new FileReader();
+                                                reader.onload = (function (theFile) {
+                                                    return function (e) {
+                                                        var img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        img.className = 'img-thumbnail';
+                                                        img.style.width = '100%';
+                                                        img.title = escape(theFile.name);
+                                                        output.appendChild(img);
+                                                    };
+                                                })(f);
+                                                reader.readAsDataURL(f);
+                                            }
+                                        }
+                                        document.getElementById('logo_input').addEventListener('change', archivo, false);
+                                    </script>
+
+
                                 </div>
                             </div>
 
@@ -84,10 +125,10 @@
                                         <div class="form-group">
                                             <label for="pais">Pais</label>
                                             <select name="pais" id="" class="form-control">
-                                                <option value="Pais">Seleccione un pais</option>
-                                                <option value="Bolivia">Bolivia</option>
-                                                <option value="Argentina">Argentina</option>
-                                                <option value="Ecuador">Ecuador</option>
+                                                <option value="">Seleccione un pais</option>
+                                                @foreach ($paises as $pais)
+                                                    <option value="{{ $pais->id }}">{{ $pais->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -96,40 +137,15 @@
 
                                         <div class="form-group">
 
-                                            <label for="nombre_empresa">Nombre de la empresa</label>
-                                            <input type="text" class="form-control">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-4">
-
-                                        <label for="tipo_de_la_empresa">Tipo de la empresa</label>
-                                        <input type="text" class="form-control">
-
-                                    </div>
 
 
-                                </div>
-
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="nit">NIT</label>
-                                            <input type="text" class="form-control">
-
+                                            <label for="estados">Estado/Provincia/Región</label>
+                                            <select name="estados" id="" class="form-control">
+                                                <option value="">Seleccione un estado</option>
+                                                @foreach ($estados as $estado)
+                                                    <option value="{{ $estado->id }}">{{ $estado->name }}</option>
+                                                @endforeach
                                             </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-
-                                        <div class="form-group">
-
-                                            <label for="telefono">Telefonos de la Empresa</label>
-                                            <input type="text" class="form-control">
 
                                         </div>
 
@@ -137,46 +153,14 @@
 
                                     <div class="col-md-4">
 
-                                        <label for="correo">Correo de la empresa</label>
-                                        <input type="email" class="form-control">
-
-                                    </div>
 
 
-                                </div>
-
-
-
-
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="cantidad_impuesto">Cantidad de impuesto</label>
-                                            <input type="number" class="form-control">
-
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-
-                                        <div class="form-group">
-
-                                            <label for="nombre_impuesto">Nombre del impuesto</label>
-                                            <input type="text" class="form-control">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-4">
-
-                                        <label for="moneda">Moneda</label>
-                                        <select name="moneda" id="" class="form-control">
-                                            <option value="Bs">Bs</option>
-                                            <option value="Dolar">Dolar</option>
-                                            <option value="Euros">Euros</option>
+                                        <label for="ciudad">Ciudad</label>
+                                        <select name="ciudad" id="" class="form-control">
+                                            <option value="">Seleccione una ciudad</option>
+                                            @foreach ($ciudades as $ciudad)
+                                                <option value="{{ $ciudad->id }}">{{ $ciudad->name }}</option>
+                                            @endforeach
                                         </select>
 
                                     </div>
@@ -185,63 +169,123 @@
                                 </div>
 
 
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+
+                                            <label for="nombre_de_la_empresa">Nombre de la empresa</label>
+                                            <input type="text" class="form-control">
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+
+                                            <label for="tipo_de_la_empresa">Tipo de la empresa</label>
+                                            <input type="text" class="form-control">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <label for="nit">NIT</label>
+                                        <input type="number" class="form-control">
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="moneda">Moneda</label>
+                                        <select name="moneda" id="" class="form-control">
+                                            @foreach ($monedas as $moneda)
+                                                <option value="{{ $moneda->id }}">{{ $moneda->name }} {{ $moneda->symbol }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
 
 
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="direccion">Direccion</label>
+
+                                            <label for="nombre_impuesto">Nombre del impuesto</label>
                                             <input type="text" class="form-control">
 
-                                            </select>
+
+
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
 
                                         <div class="form-group">
 
-                                            <label for="ciudad">Ciudad</label>
-                                            <input type="text" class="form-control">
+                                            <label for="cantidad_impuesto">Cantidad</label>
+                                            <input type="number" class="form-control">
 
                                         </div>
 
                                     </div>
 
+                                    <div class="col-md-3">
+
+                                        <label for="telefono_empresa">Teléfonos de la empresa</label>
+                                        <input type="number" class="form-control">
+
+                                    </div>
+
+
                                     <div class="col-md-4">
 
-                                        <label for="departamento">Departamento/Provincia/Región</label>
+                                        <label for="correo_empresa">Correo de la empresa</label>
                                         <input type="text" class="form-control">
 
                                     </div>
 
 
+
+
                                 </div>
-
-
 
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="codigo_postal">Codigo Postal</label>
-                                            <input type="number" class="form-control">
+                                    <div class="col-md-6">
 
-                                            </select>
-                                        </div>
+                                        <label for="direccion_empresa">Dirección de la empresa</label>
+                                        <input type="text" class="form-control">
+
+
+
                                     </div>
 
+                                    <div class="col-md-3">
 
+                                        <label for="codigo_postal">Código postal</label>
+                                        <select name="codigo_postal" id="" class="form-control">
+                                            <option value="">Seleccione un código postal</option>
+                                            @foreach ($paises as $paise)
+                                                <option value="{{ $paise->phone_code }}">{{ $paise->phone_code }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
 
                                 </div>
-
-
-
-
-
 
                             </div>
 
                         </div>
+
+
+
+
                     </form>
 
 

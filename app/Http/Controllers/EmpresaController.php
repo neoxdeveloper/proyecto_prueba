@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmpresaController extends Controller
 {
@@ -20,7 +21,11 @@ class EmpresaController extends Controller
      */
     public function create()
     {
-        return view('admin.empresas.create');
+        $paises = DB::table("countries")->get();
+        $estados = DB::table("states")->get();
+        $ciudades = DB::table("cities")->get();
+        $monedas = DB::table("currencies")->get();
+        return view('admin.empresas.create', compact('paises', 'estados', 'ciudades', 'monedas'));
     }
 
     /**
