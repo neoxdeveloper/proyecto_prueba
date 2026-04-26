@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empresa;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class EmpresaController extends Controller
 {
@@ -22,11 +25,9 @@ class EmpresaController extends Controller
     public function create()
     {
         $paises = DB::table('countries')->get();
-        $estados = DB::table('states')->get();
-        $ciudades = DB::table('cities')->get();
         $monedas = DB::table('currencies')->get();
 
-        return view('admin.empresas.create', compact('paises', 'estados', 'ciudades', 'monedas'));
+        return view('admin.empresas.create', compact('paises', 'monedas'));
     }
 
     public function buscar_estado($id_pais)
@@ -96,6 +97,16 @@ class EmpresaController extends Controller
         }
 
         $empresa->save();
+
+        $usuario = new user();
+        $usuario->name = "Admin";
+        $usuario->email = $request->correo_empresa;
+        $usuario->password = Hash::make($request['nit']);
+        $usuario->empresa_id = $empresa->id;
+        $usuario->save();
+
+        Auth::Login($usuario);
+
 
         return redirect()->route('admin.index')
             ->with('mensaje', 'Se registró la empresa correctamente')
